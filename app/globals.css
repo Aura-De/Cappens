@@ -77,9 +77,6 @@
     height: var(--logo-h);
     width: auto;
     transition: height .35s var(--ease);
-    /* Integrar el PNG (papel gris del asset) con el fondo claro del nav */
-    mix-blend-mode: multiply;
-    filter: contrast(1.04);
   }
   .links { display: flex; align-items: center; gap: clamp(16px, 2.8vw, 36px); flex-wrap: wrap; justify-content: flex-end; }
   .links a, .drawer a {
