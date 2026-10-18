@@ -10,7 +10,7 @@ export function ContactSection() {
         <h2 id="contacto-title" className="contact-section-title reveal" style={{ ['--r' as string]: 1 }}>
           Hablemos de tu proyecto.
         </h2>
-        <div className="contact-section-panel glass-panel reveal" style={{ ['--r' as string]: 2 }}>
+        <div className="contact-section-panel glass-panel glass-crystal reveal" style={{ ['--r' as string]: 2 }}>
           <ContactForm formId="contact-page-form" />
         </div>
       </div>

@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 type CappensPageEffectsOptions = {
   onContactNavClick?: () => void;
 };
 
 export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
+  const onContactNavClickRef = useRef(options?.onContactNavClick);
+  onContactNavClickRef.current = options?.onContactNavClick;
+
   useEffect(() => {
     const nav = document.getElementById('nav');
     const btn = document.getElementById('menuBtn');
@@ -50,7 +53,7 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
     );
     const onContactNavClick = (e: Event) => {
       e.preventDefault();
-      options?.onContactNavClick?.();
+      onContactNavClickRef.current?.();
       setMenu(false);
     };
     contactNavLinks.forEach((a) => a.addEventListener('click', onContactNavClick));
@@ -123,5 +126,5 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
       spy?.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
     };
-  }, [options?.onContactNavClick]);
+  }, []);
 }

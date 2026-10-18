@@ -38,7 +38,7 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
       <button type="button" className="contact-modal-overlay" aria-label="Cerrar" onClick={onClose} />
       <div
         ref={panelRef}
-        className="contact-modal glass-panel"
+        className="contact-modal glass-panel glass-crystal"
         role="dialog"
         aria-modal="true"
         aria-labelledby="contact-modal-title"
