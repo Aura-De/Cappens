@@ -84,7 +84,7 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
       const links = Array.from(
         document.querySelectorAll<HTMLAnchorElement>('.links a, .drawer a')
       );
-      const secs = ['nombre', 'servicios', 'metodo', 'contacto']
+      const secs = ['servicios', 'metodo', 'contacto']
         .map((id) => document.getElementById(id))
         .filter(Boolean) as HTMLElement[];
 
