@@ -1,6 +1,7 @@
 'use client';
 
 import { useId, useState } from 'react';
+import type { Messages } from '@/lib/i18n/messages';
 
 export type ContactFormPayload = {
   name: string;
@@ -11,12 +12,13 @@ export type ContactFormPayload = {
 
 type ContactFormProps = {
   formId?: string;
-  /** Compact layout for modal */
   variant?: 'default' | 'modal';
+  messages: Messages;
   onSuccess?: () => void;
 };
 
-export function ContactForm({ formId, variant = 'default', onSuccess }: ContactFormProps) {
+export function ContactForm({ formId, variant = 'default', messages, onSuccess }: ContactFormProps) {
+  const t = messages.contact;
   const uid = useId();
   const id = formId ?? `contact-${uid}`;
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -41,21 +43,21 @@ export function ContactForm({ formId, variant = 'default', onSuccess }: ContactF
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error('No se pudo enviar');
+      if (!res.ok) throw new Error(t.errorNetwork);
       setStatus('success');
       e.currentTarget.reset();
       onSuccess?.();
     } catch {
       setStatus('error');
-      setErrorMsg('Algo falló al enviar. Inténtalo de nuevo en un momento.');
+      setErrorMsg(t.errorSend);
     }
   }
 
   if (status === 'success') {
     return (
       <div className="contact-success glass-panel" role="status">
-        <p className="contact-success-title">Gracias</p>
-        <p className="contact-success-text">Te contactaremos pronto.</p>
+        <p className="contact-success-title">{t.thanksTitle}</p>
+        <p className="contact-success-text">{t.thanksText}</p>
       </div>
     );
   }
@@ -69,21 +71,21 @@ export function ContactForm({ formId, variant = 'default', onSuccess }: ContactF
     >
       <div className="contact-form-grid">
         <div className="contact-field">
-          <label htmlFor={`${id}-name`}>Nombre</label>
+          <label htmlFor={`${id}-name`}>{t.name}</label>
           <input id={`${id}-name`} name="name" type="text" required autoComplete="name" />
         </div>
         <div className="contact-field">
-          <label htmlFor={`${id}-email`}>Email</label>
+          <label htmlFor={`${id}-email`}>{t.email}</label>
           <input id={`${id}-email`} name="email" type="email" required autoComplete="email" />
         </div>
         <div className="contact-field contact-field--full">
           <label htmlFor={`${id}-company`}>
-            Empresa <span className="contact-optional">(opcional)</span>
+            {t.company} <span className="contact-optional">{t.companyOptional}</span>
           </label>
           <input id={`${id}-company`} name="company" type="text" autoComplete="organization" />
         </div>
         <div className="contact-field contact-field--full">
-          <label htmlFor={`${id}-message`}>Mensaje</label>
+          <label htmlFor={`${id}-message`}>{t.message}</label>
           <textarea id={`${id}-message`} name="message" rows={5} required />
         </div>
       </div>
@@ -93,7 +95,7 @@ export function ContactForm({ formId, variant = 'default', onSuccess }: ContactF
         </p>
       )}
       <button type="submit" className="btn solid contact-submit" disabled={status === 'submitting'}>
-        {status === 'submitting' ? 'Enviando…' : 'Enviar mensaje'}
+        {status === 'submitting' ? t.submitting : t.submit}
       </button>
     </form>
   );

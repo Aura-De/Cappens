@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "title": "Cappens Technology",
+    "description": "Cappens designs and builds custom digital products and AI solutions that integrate into your business."
+  },
+  "lang": {
+    "es": "Spanish",
+    "en": "English",
+    "switch": "Language"
+  },
+  "contact": {
+    "label": "Contact",
+    "title": "Let's talk about your project.",
+    "modalTitle": "Contact",
+    "modalLead": "Tell us about your project and we'll get back to you as soon as we can.",
+    "name": "Name",
+    "email": "Email",
+    "company": "Company",
+    "companyOptional": "(optional)",
+    "message": "Message",
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "thanksTitle": "Thank you",
+    "thanksText": "We'll be in touch soon.",
+    "errorSend": "Something went wrong. Please try again in a moment.",
+    "errorNetwork": "Could not send",
+    "close": "Close",
+    "closeDialog": "Close contact dialog"
+  }
+}

@@ -1,14 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { setupLayerStack } from '@/components/setupLayerStack';
 
 type CappensPageEffectsOptions = {
-  onContactNavClick?: () => void;
+  menuLabels?: { open: string; close: string };
+  /** Re-run listeners when static markup is swapped (e.g. locale change). */
+  locale?: string;
 };
 
 export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
-  const onContactNavClickRef = useRef(options?.onContactNavClick);
-  onContactNavClickRef.current = options?.onContactNavClick;
+  const locale = options?.locale ?? 'es';
+  const menuLabelsRef = useRef(options?.menuLabels);
+  menuLabelsRef.current = options?.menuLabels;
 
   useEffect(() => {
     const nav = document.getElementById('nav');
@@ -17,6 +21,7 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
     if (!nav || !btn || !bar) return;
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const teardownLayers = setupLayerStack(reduce);
 
     const onScroll = () => {
       const y = window.scrollY || 0;
@@ -30,7 +35,10 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
     const setMenu = (open: boolean) => {
       nav.classList.toggle('open', open);
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      btn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      const labels = menuLabelsRef.current;
+      const closeLabel = labels?.close ?? 'Cerrar menú';
+      const openLabel = labels?.open ?? 'Abrir menú';
+      btn.setAttribute('aria-label', open ? closeLabel : openLabel);
     };
 
     const onMenuClick = () => setMenu(!nav.classList.contains('open'));
@@ -47,16 +55,6 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
     document.addEventListener('keydown', onKeydown);
     drawerLinks.forEach((a) => a.addEventListener('click', onDrawerLinkClick));
     window.addEventListener('resize', onResize);
-
-    const contactNavLinks = Array.from(
-      document.querySelectorAll<HTMLAnchorElement>('[data-contact-modal]')
-    );
-    const onContactNavClick = (e: Event) => {
-      e.preventDefault();
-      onContactNavClickRef.current?.();
-      setMenu(false);
-    };
-    contactNavLinks.forEach((a) => a.addEventListener('click', onContactNavClick));
 
     let revealIo: IntersectionObserver | undefined;
     if (!reduce && 'IntersectionObserver' in window) {
@@ -84,7 +82,7 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
       const links = Array.from(
         document.querySelectorAll<HTMLAnchorElement>('.links a, .drawer a')
       );
-      const secs = ['servicios', 'metodo', 'contacto']
+      const secs = ['servicios', 'metodo']
         .map((id) => document.getElementById(id))
         .filter(Boolean) as HTMLElement[];
 
@@ -115,16 +113,20 @@ export function useCappensPageEffects(options?: CappensPageEffectsOptions) {
       window.addEventListener('pointermove', onPointerMove, { passive: true });
     }
 
+    setMenu(false);
+
     return () => {
+      teardownLayers?.();
+      if (btn.isConnected) btn.removeEventListener('click', onMenuClick);
       window.removeEventListener('scroll', onScroll);
-      btn.removeEventListener('click', onMenuClick);
       document.removeEventListener('keydown', onKeydown);
-      drawerLinks.forEach((a) => a.removeEventListener('click', onDrawerLinkClick));
-      contactNavLinks.forEach((a) => a.removeEventListener('click', onContactNavClick));
+      drawerLinks.forEach((a) => {
+        if (a.isConnected) a.removeEventListener('click', onDrawerLinkClick);
+      });
       window.removeEventListener('resize', onResize);
       revealIo?.disconnect();
       spy?.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
     };
-  }, []);
+  }, [locale]);
 }

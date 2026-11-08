@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "title": "Cappens Technology",
+    "description": "Cappens diseña y desarrolla productos digitales a medida y soluciones de IA que se integran en tu negocio."
+  },
+  "lang": {
+    "es": "Español",
+    "en": "English",
+    "switch": "Idioma"
+  },
+  "contact": {
+    "label": "Contacto",
+    "title": "Hablemos de tu proyecto.",
+    "modalTitle": "Contacto",
+    "modalLead": "Cuéntanos tu proyecto y te respondemos lo antes posible.",
+    "name": "Nombre",
+    "email": "Email",
+    "company": "Empresa",
+    "companyOptional": "(opcional)",
+    "message": "Mensaje",
+    "submit": "Enviar mensaje",
+    "submitting": "Enviando…",
+    "thanksTitle": "Gracias",
+    "thanksText": "Te contactaremos pronto.",
+    "errorSend": "Algo falló al enviar. Inténtalo de nuevo en un momento.",
+    "errorNetwork": "No se pudo enviar",
+    "close": "Cerrar",
+    "closeDialog": "Cerrar ventana de contacto"
+  }
+}

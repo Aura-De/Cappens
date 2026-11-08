@@ -1,27 +1,47 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { cappensMarkup } from '@/lib/cappens-markup';
-import { ContactModal } from '@/components/contact/ContactModal';
-import { ContactSection } from '@/components/contact/ContactSection';
+import { useLayoutEffect, useMemo, useRef } from 'react';
+import { getCappensMarkup } from '@/lib/get-cappens-markup';
 import { useCappensPageEffects } from '@/components/useCappensPageEffects';
+import { StackTools } from '@/components/StackTools';
+import { LangSwitch } from '@/components/i18n/LangSwitch';
+import { LocaleProvider, useLocale } from '@/components/i18n/LocaleProvider';
+import { SetDocumentLang } from '@/components/i18n/SetDocumentLang';
 
-export default function Home() {
-  const [contactModalOpen, setContactModalOpen] = useState(false);
+function HomeContent() {
+  const { locale } = useLocale();
+  const markupHostRef = useRef<HTMLDivElement>(null);
 
-  const openContactModal = useCallback(() => setContactModalOpen(true), []);
-  const closeContactModal = useCallback(() => setContactModalOpen(false), []);
+  const markup = useMemo(() => getCappensMarkup(locale), [locale]);
 
-  useCappensPageEffects({ onContactNavClick: openContactModal });
+  useLayoutEffect(() => {
+    if (markupHostRef.current) {
+      markupHostRef.current.innerHTML = markup;
+    }
+  }, [markup]);
+
+  useCappensPageEffects({
+    locale,
+    menuLabels: {
+      open: locale === 'en' ? 'Open menu' : 'Abrir menú',
+      close: locale === 'en' ? 'Close menu' : 'Cerrar menú',
+    },
+  });
 
   return (
     <>
-      <div
-        style={{ display: 'contents' }}
-        dangerouslySetInnerHTML={{ __html: cappensMarkup }}
-      />
-      <ContactSection />
-      <ContactModal open={contactModalOpen} onClose={closeContactModal} />
+      <SetDocumentLang locale={locale} />
+      <div ref={markupHostRef} className="cappens-markup-host" />
+      <LangSwitch key={locale} />
+      <StackTools locale={locale} />
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <LocaleProvider>
+      <HomeContent />
+    </LocaleProvider>
   );
 }
