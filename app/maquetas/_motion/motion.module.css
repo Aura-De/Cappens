@@ -1,0 +1,232 @@
+/* Primitivas de movimiento compartidas. Todas las clases llevan prefijo para no chocar en el empaquetado. */
+
+/* ---------------- Reveal (variantes de necora.pro) ---------------- */
+.rv {
+  --rv-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0;
+  filter: blur(16px);
+  transition:
+    opacity calc(var(--rv-dur, 0.88s) * 0.7) var(--rv-ease) var(--rv-delay, 0s),
+    transform var(--rv-dur, 0.88s) var(--rv-ease) var(--rv-delay, 0s),
+    filter var(--rv-dur, 0.88s) var(--rv-ease) var(--rv-delay, 0s);
+  will-change: transform, opacity, filter;
+}
+.rv_up { transform: translate3d(0, 44px, 0) scale(0.98); }
+.rv_down { transform: translate3d(0, -44px, 0) scale(0.98); }
+.rv_left { transform: translate3d(max(-150px, -12vw), 0, 0) scale(0.96); filter: blur(14px); }
+.rv_right { transform: translate3d(min(150px, 12vw), 0, 0) scale(0.96); filter: blur(14px); }
+.rv_scale { transform: scale(0.86); filter: blur(22px); }
+.rv_blur { transform: none; filter: blur(18px); }
+.rvIn {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+}
+
+/* ---------------- Words ---------------- */
+.moWords { text-wrap: balance; }
+.moWordsLine { display: block; }
+.moWordMask { display: inline-block; white-space: nowrap; }
+.moWord {
+  display: inline-block;
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--wd, 0s),
+    transform 0.86s cubic-bezier(0.16, 1, 0.3, 1) var(--wd, 0s),
+    filter 0.86s cubic-bezier(0.16, 1, 0.3, 1) var(--wd, 0s);
+  will-change: transform, filter, opacity;
+}
+.moWordsBlur .moWord { opacity: 0; transform: scale(0.86); filter: blur(22px); }
+.moWordsRise .moWordMask { overflow: hidden; vertical-align: top; padding: 0 0.12em 0.1em 0.04em; margin: 0 -0.12em -0.1em -0.04em; }
+.moWordsRise .moWord { transform: translate3d(0, 110%, 0) rotate(4deg); transform-origin: 0 100%; }
+.moWordsIn .moWord { opacity: 1; transform: none; filter: blur(0); }
+
+/* ---------------- Logo origami ----------------
+   Cada cara real del delfín es un <span> recortado (clip-path) con la imagen dentro.
+   Plegada: girada 180° sobre la arista que comparte con su vecina (debajo de ella).
+   Desplegada: en su sitio. Sombra interior mientras gira y un brillo final que cruza todo el papel. */
+:where(.ori) {
+  position: relative;
+  display: inline-block;
+}
+.ori {
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+:where(.oriMark) { width: 64px; }
+:where(.oriFull) { width: 200px; }
+.ori .oriGhost {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  visibility: hidden;
+}
+.ori .oriLayer {
+  position: absolute;
+  inset: 0;
+}
+.ori .oriPiece,
+.ori .oriText {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+.ori .oriImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  filter: none;
+  object-fit: fill;
+  user-select: none;
+}
+.ori .oriShade,
+.ori .oriGlint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ori .oriShade {
+  background: #1f1e1c;
+  opacity: 0;
+}
+.ori .oriGlint {
+  background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.55) 50%, transparent 58%) no-repeat;
+  background-size: 300% 100%;
+  background-position: 120% 0;
+  mix-blend-mode: soft-light;
+  opacity: 0;
+}
+
+.ori .oriPiece {
+  transform-origin: var(--ox) var(--oy);
+  backface-visibility: visible;
+  will-change: transform, opacity;
+  --t: calc(var(--delay) + var(--o) * var(--span));
+  transition:
+    transform 0.85s cubic-bezier(0.34, 1.2, 0.5, 1) var(--t),
+    opacity 0.12s linear var(--t);
+}
+.ori .oriPiece .oriShade {
+  transition: opacity 0.85s cubic-bezier(0.2, 0.8, 0.3, 1) var(--t);
+}
+.ori.oriFolded .oriPiece {
+  opacity: 0;
+  transform: perspective(520px) rotate3d(var(--ax), var(--ay), 0, -178deg);
+}
+.ori.oriFolded .oriPiece .oriShade { opacity: calc(0.45 + var(--s) * 0.15); }
+.ori.oriOpen .oriPiece { opacity: 1; transform: perspective(520px) rotate3d(var(--ax), var(--ay), 0, 0deg); }
+.ori.oriOpen .oriPiece .oriShade { opacity: 0; }
+
+.ori .oriText {
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--delay) + var(--span) + 0.25s);
+}
+.ori.oriFolded .oriText { opacity: 0; transform: translate3d(-4%, 0, 0); filter: blur(8px); }
+.ori.oriOpen .oriText { opacity: 1; transform: none; filter: none; }
+
+/* brillo que cruza el papel una vez montado (todas las caras comparten la misma caja: el brillo es continuo) */
+.ori.oriOpen .oriGlint {
+  animation: moGlint 1.3s cubic-bezier(0.45, 0, 0.2, 1) calc(var(--delay) + var(--span) + 0.75s) both;
+}
+@keyframes moGlint {
+  0% { opacity: 0; background-position: 130% 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; background-position: -30% 0; }
+}
+
+/* sombra suave bajo el papel (opcional) */
+.oriShadow {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -5%;
+  height: 9%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(31, 30, 28, 0.18), transparent);
+  filter: blur(3px);
+  transition: opacity 0.9s ease calc(var(--delay) + var(--span) * 0.6), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--delay) + var(--span) * 0.6);
+}
+.oriFull .oriShadow { right: 58%; left: 8%; }
+.oriFolded .oriShadow { opacity: 0; transform: scaleX(0.3); }
+.oriOpen .oriShadow { opacity: 1; transform: none; }
+
+/* onda de pliegues al pasar el cursor */
+.ori .oriRipple .oriPiece {
+  animation: moRipple 0.8s cubic-bezier(0.3, 0.7, 0.2, 1) calc(var(--o) * 0.4s) both;
+}
+.ori .oriRipple .oriPiece .oriShade {
+  animation: moRippleShade 0.8s cubic-bezier(0.3, 0.7, 0.2, 1) calc(var(--o) * 0.4s) both;
+}
+@keyframes moRipple {
+  0%, 100% { transform: perspective(520px) rotate3d(var(--ax), var(--ay), 0, 0deg); }
+  40% { transform: perspective(520px) rotate3d(var(--ax), var(--ay), 0, -38deg); }
+}
+@keyframes moRippleShade {
+  0%, 100% { opacity: 0; }
+  40% { opacity: 0.3; }
+}
+.oriReduced .oriPiece,
+.oriReduced .oriText,
+.oriReduced .oriShadow { transition: opacity 0.4s ease !important; }
+
+/* ---------------- Preloader ---------------- */
+.pre {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  background: var(--mq-bg, #fafaf8);
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 0.85s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.preOut { clip-path: inset(0 0 100% 0); }
+.preInner {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.6s ease;
+}
+.preOut .preInner { transform: translate3d(0, -60px, 0); opacity: 0; }
+.preLogo { width: min(420px, 74vw); }
+.preCaption {
+  font: 500 12px/1 var(--mq-body, sans-serif);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mq-ink-mute, #6b6762);
+  opacity: 0;
+  animation: moFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.35s both;
+}
+.preBar {
+  width: min(180px, 40vw);
+  height: 1px;
+  background: currentColor;
+  color: var(--mq-ink, #1f1e1c);
+  transform-origin: left;
+  animation: moBar 2.1s cubic-bezier(0.65, 0, 0.35, 1) 0.1s both;
+}
+@keyframes moBar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes moFadeUp {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Movimiento reducido: se mantiene un fundido corto, sin desplazamientos ni desenfoques */
+@media (prefers-reduced-motion: reduce) {
+  .rv,
+  .moWord { opacity: 1 !important; transform: none !important; filter: none !important; transition-duration: 0.35s !important; }
+  .ori .oriRipple .oriPiece { animation: none; }
+}
