@@ -17,7 +17,6 @@
 .crmEmployeeAvatar[data-working=true] .crmAvatarFacet { animation: crmFacetBreath 2s ease-in-out infinite alternate; }
 @keyframes crmEmployeePulse { 0%,100% { opacity: .25; transform: scale(1); } 50% { opacity: .8; transform: scale(1.08); } }
 @keyframes crmFacetBreath { from { opacity: .55; } to { opacity: 1; } }
-@media(prefers-reduced-motion:reduce) { .crmEmployeeAvatar[data-working=true] .crmAvatarRing { animation: none; opacity: .65; } .crmEmployeeAvatar[data-working=true] .crmAvatarFacet { animation: none; } }
 .crm {
   --crm-ease: cubic-bezier(.16, 1, .3, 1);
   --crm-won: color-mix(in srgb, var(--mq-ink) 76%, var(--mq-accent));
@@ -417,20 +416,6 @@
   .crmPreviewHeading p { font-size: 1.05cqw; }
 }
 @media (hover: none) { .crmMoveButtons { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) {
-  .crm *, .crm *::before, .crm *::after { animation-duration: 90ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important; transition-duration: 90ms !important; transition-delay: 0ms !important; transition-property: background, color, border-color, opacity, transform, grid-template-rows, max-width !important; transition-timing-function: var(--crm-ease) !important; scroll-behavior: auto !important; }
-  .crm .crmCard { animation-name: crmCardIn !important; }
-  .crm .crmColumn { animation-name: crmColumnIn !important; }
-  .crm .crmContactTable tbody tr, .crm .crmTaskRow { animation-name: crmRowIn !important; }
-  .crm .crmCustomChip, .crm .crmFieldPill { animation-name: crmChipIn !important; }
-  .crm .crmCustomPanel { animation-name: crmPanelIn !important; }
-  .crm .crmContactsView, .crm .crmTasksView, .crm .crmModulePlaceholder { animation-name: crmViewIn !important; }
-  .crm .crmCelebration { animation-name: crmWinPulse !important; }
-  .crm .crmDragGhost { animation-name: none !important; }
-  .crm .crmSkeletonGrid span { animation-name: crmShimmer !important; }
-  .crmCelebration i { display: none; }
-  .crmSkeletonGrid span { animation-duration: 180ms !important; }
-}
 
 /* v3 · digital coworkers and auditable actions */
 .crmAppLayout { grid-template-columns: 174px minmax(0, 1fr) 270px; }
@@ -550,14 +535,6 @@
   .crmEvent p { font-size: 12px; }
   .crmEventMeta, .crmEventClient { font-size: 9px !important; }
   .crmApprovalButtons button { min-height: 35px; font-size: 11px !important; }
-}
-@media(prefers-reduced-motion:reduce) {
-  .crm .crmEmployeeCard, .crm .crmEmployeeForm { animation-name: crmEmployeeUnfold !important; }
-  .crm .crmEvent { animation-name: crmEventIn !important; }
-  .crm .crmEmployeeCursor { animation: none !important; opacity: 1; transform: translate(var(--crm-ghost-to-x), var(--crm-ghost-to-y)); }
-  .crm .crmEmployeeDragCard { display: none; }
-  .crm .crmEmployeeAvatar[data-working=true] .crmAvatarRing { animation: none !important; opacity: .65; }
-  .crm .crmEmployeeAvatar[data-working=true] .crmAvatarFacet { animation: none !important; }
 }
 .crmPreviewTeam { position: absolute; top: 30cqw; left: 1.6cqw; right: 1.3cqw; transform-origin: left; }
 .crmPreviewTeam > span { font-size: .7cqw; letter-spacing: .1em; color: var(--mq-ink-2); }

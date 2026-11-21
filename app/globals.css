@@ -748,7 +748,6 @@
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    *, *::before, *::after { animation: none !important; transition: none !important; }
     html.layer-stack-on .layer-stack__card {
       transform: none !important;
       filter: none !important;
