@@ -22,17 +22,9 @@ import mo from './motion.module.css';
 
 export const EASE = 'cubic-bezier(.16,1,.3,1)';
 
+/** La web siempre se anima, también con «reducir movimiento» en el sistema. */
 export function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const on = () => setReduced(mq.matches);
-    on();
-    mq.addEventListener?.('change', on);
-    return () => mq.removeEventListener?.('change', on);
-  }, []);
-  return reduced;
+  return false;
 }
 
 /** true mientras el elemento está visible (amount = fracción visible necesaria). Con once, se queda en true. */

@@ -29,12 +29,6 @@
 .mq-root *, .mq-root *::before, .mq-root *::after { box-sizing: border-box; }
 .mq-root :where(p) { margin: 0; }
 .mq-root :where(img) { max-width: 100%; display: block; }
-@media (prefers-reduced-motion: reduce) {
-  .mq-root *, .mq-root *::before, .mq-root *::after {
-    animation-duration: .01ms !important; animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important; scroll-behavior: auto !important;
-  }
-}
 
 /* Neutraliza los selectores de elemento de app/globals.css (h1, h2, section, footer)
    dentro de las maquetas. Especificidad (0,1,0): las clases de CSS Modules,
